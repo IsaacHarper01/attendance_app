@@ -1,0 +1,392 @@
+#:kivy 2.0.0
+
+<Navegar>:
+    main_screen:
+    agregar_alumno:
+    reportes:
+    escanear:
+    buscar_alumno:
+    reporte_de_asistencias:
+    reporte_de_ingresos:
+    pagos:
+
+<main_screen>:
+    name: '1'
+    BoxLayout:
+        size_hint: 1,.4
+        spacing: "15dp"
+        pos_hint: {"center_x":0.5,"center_y":.7}
+        Image:
+            source: "Images/f=ma18.png"
+            size_hint: 1,1
+            pos_hint: { "center_x": .5}
+    GridLayout:
+        spacing: "15dp"
+        size_hint: 0.8,.5
+        pos_hint: {"center_x":0.5}
+        cols:1
+        Button:
+            text: "Escanear"
+            size_hint: .5,.1
+            pos_hint: { "center_x": .5}
+            on_release: app.root.current = '4'
+        Button:
+            text: "Agregar Alumno"
+            size_hint: .5,.1
+            pos_hint: { "center_x": .5 }
+            on_release: app.root.current = '2'
+        Button:
+            text: "Buscar Alumno"
+            size_hint: .5,.1
+            pos_hint: { "center_x": .5 }
+            on_release: app.root.current = '5'
+        Button:
+            text: "Reportes"
+            size_hint: .5,.1
+            pos_hint: { "center_x": .5 }
+            on_release: app.root.current = '3'
+
+<agregar_alumno>:
+    name: '2'
+    size_hint: .8,.8
+    pos_hint: {"center_x": .5,"center_y":.5}
+    GridLayout:
+        cols:1
+        spacing: "15dp"
+        Label:
+            text: "Nombre"
+            size_hint: .8,.2
+        TextInput:
+            id: name_input
+            multiline: False
+            size_hint: 1,.4
+        Label:
+            text: "Apellidos"
+            size_hint: .8,.2
+        TextInput:
+            id: last_name_input
+            multiline: False
+            size_hint: 1,.4
+        Label:
+            text: "Edad"
+            size_hint: .8,.2
+        TextInput:
+            id: age_input
+            multiline: False
+            on_text_validate: root.edad_validate(self)
+            size_hint: 1,.4
+        Label:
+            text: "Localidad"
+            size_hint: .8,.2
+        TextInput:
+            id: address_input
+            multiline: False
+            on_text_validate: root.localidad_validate(self)
+            size_hint: 1,.4
+        Label:
+            text: "Telefono"
+            size_hint: .8,.2
+        TextInput:
+            id: phone_input
+            multiline: False
+            on_text_validate: root.phone_validate(self)
+            size_hint: 1,.4
+        Button:
+            text: "Registrar"
+            size_hint: .5,.5
+            pos_hint: { "center_x": .5 }
+            on_press: root.on_press_registro()
+
+        Button:
+            text: "Regresar"
+            size_hint: .5,.5
+            pos_hint: { "center_x": .5 }
+            on_release: app.root.current = '1'
+
+        Label:
+            text: root.texto_registro 
+            size_hint: .4,.3
+            pos_hint: { "center_x": .5 }
+            
+<reportes>:
+    name: '3'
+    GridLayout:
+        spacing: "20dp"
+        cols:1
+        size_hint: 0.8,.8
+        pos_hint: {"center_x":.5,"center_y":.5}
+        Button:
+            text: "Reporte de asistencias"
+            on_release: app.root.current = '6'
+        Button:
+            text: "Reporte de ingresos"
+            on_release: app.root.current = '7'
+        Button:
+            text: "Regresar"
+            on_release: app.root.current = '1'
+        
+<escanear>:
+    name: '4'
+    Camera:
+        size_hint: 1,.5
+        pos_hint: {"center_y":.8}
+        resolution: (320,240)
+        play: root.record
+    GridLayout:
+        spacing: "15dp"
+        cols:1
+        size_hint: .8,.5
+        pos_hint: {"center_x":.5}
+        Label:
+            text: root.text_label
+        Button:
+            text: "Start"
+            on_press: root.start_camera()
+        Button:
+            text: "Marcar asistencia"
+            disabled: root.buttons_desactived
+            on_press: root.mark_present()
+        Button:
+            text: "Pagos"
+            disabled: root.buttons_desactived
+            on_release: app.root.current = '8'
+        Button:
+            text: "Regresar"
+            on_release: app.root.current = '1'
+
+<buscar_alumno>:
+    name: '5'
+    size_hint: .8, .9
+    pos_hint: {"center_x":.5,"center_y":.5}
+    GridLayout:
+        spacing: "20dp"
+        cols:1
+        Label:
+            text: "Numero de alumno"
+        TextInput:
+            id: search_id
+            size_hint: 1,.6
+            multiline: False
+        Label:
+            text: "Nombre"
+        TextInput:
+            id: search
+            size_hint: 1,.6
+            multiline: False
+        Button:
+            text: "Buscar"
+            on_press: root.search_press()
+        Button:
+            text: "Marcar asistencia"
+            on_press: root.mark_present()
+            disabled: root.activate_attendance
+        Button:
+            text: "Reporte de asistencias"
+            disabled: True
+        Button:
+            text: "Eliminar registro"
+            on_press: root.delete_register()
+            disabled: root.activate_delete
+        Button:
+            text: "Regresar"
+            on_release: app.root.current = '1'
+        Label:
+            text: root.text_label
+        
+<reporte_de_asistencias>:
+    name: '6'
+    size_hint: 1,.9
+    BoxLayout:
+        size_hint: 1,1
+        orientation:"vertical"
+        Label:
+            text: root.text_label
+        GridLayout:
+            cols: 3
+            size_hint: 0.9,0.6
+            spacing: "10dp"
+            pos_hint: {"center_x":.5}
+            Button:
+                text: "Enero"
+                on_press: root.on_january()
+            Button:
+                text: "Febrero"
+                on_press: root.on_febuary()
+            Button:
+                text: "Marzo" 
+                on_press: root.on_march()
+            Button:
+                text: "Abril"
+                on_press: root.on_april()
+            Button:
+                text: "Mayo"
+                on_press: root.on_may()
+            Button:
+                text: "Junio"
+                on_press: root.on_june()
+            Button:
+                text: "Julio"
+                on_press: root.on_july()
+            Button:
+                text: "Agosto"
+                on_press: root.on_august()
+            Button:
+                text: "Septiembre"
+                on_press: root.on_september()
+            Button:
+                text: "Octubre"
+                on_press: root.on_october()
+            Button:
+                text: "Noviembre"
+                on_press: root.on_november()
+            Button:
+                text: "Diciembre"
+                on_press: root.on_december()
+
+<reporte_de_ingresos>:
+    name: '7'
+    size_hint: 1,1
+    BoxLayout:
+        spacing: "10dp"
+        orientation:"vertical"
+        Label:
+            size_hint: 1,.6
+            text: root.text_label
+        Label:
+            size_hint: 1,.2
+            text: "Fecha de inicio: día mes año (dd-mm-yyyy)"
+        GridLayout:
+            cols:3
+            spacing: "10dp"
+            size_hint: .9,.15
+            pos_hint: {"center_x":.5}
+            TextInput:
+                id: day
+                multiline: False
+            TextInput:
+                id: month
+                multiline: False
+            TextInput:
+                id: year
+                multiline: False
+        Label:
+            size_hint: 1,0.2
+            text: "Fecha de cierre: día mes año (dd-mm-yyyy)"
+        GridLayout:
+            cols:3
+            spacing: "10dp"
+            size_hint: .9,.15
+            pos_hint: {"center_x":.5}
+            TextInput:
+                id: day
+                multiline: False
+            TextInput:
+                id: month
+                multiline: False
+            TextInput:
+                id: year
+                multiline: False
+        Button:
+            pos_hint: {"center_x":.5}
+            size_hint: .9,.2
+            text: "Generar"
+        Button:
+            pos_hint: {"center_x":.5}
+            size_hint: .9,.2
+            text: "Reporte diario"
+            on_press: root.get_daily_income()
+        Button:
+            pos_hint: {"center_x":.5}
+            size_hint: .9,.2
+            text: "Reporte mensual"
+            on_press: root.press_month()
+        GridLayout:
+            cols: 3
+            size_hint: 0.9,0.9
+            spacing: "10dp"
+            pos_hint: {"center_x":.5}
+            Button:
+                text: "Enero"
+                on_press: root.on_january()
+                disabled: root.activate_buttons
+            Button:
+                text: "Febrero"
+                on_press: root.on_febuary()
+                disabled: root.activate_buttons
+            Button:
+                text: "Marzo" 
+                on_press: root.on_march()
+                disabled: root.activate_buttons
+            Button:
+                text: "Abril"
+                on_press: root.on_april()
+                disabled: root.activate_buttons
+            Button:
+                text: "Mayo"
+                on_press: root.on_may()
+                disabled: root.activate_buttons
+            Button:
+                text: "Junio"
+                on_press: root.on_june()
+                disabled: root.activate_buttons
+            Button:
+                text: "Julio"
+                on_press: root.on_july()
+                disabled: root.activate_buttons
+            Button:
+                text: "Agosto"
+                on_press: root.on_august()
+                disabled: root.activate_buttons
+            Button:
+                text: "Septiembre"
+                on_press: root.on_september()
+                disabled: root.activate_buttons
+            Button:
+                text: "Octubre"
+                on_press: root.on_october()
+                disabled: root.activate_buttons
+            Button:
+                text: "Noviembre"
+                on_press: root.on_november()
+                disabled: root.activate_buttons
+            Button:
+                text: "Diciembre"
+                on_press: root.on_december()
+                disabled: root.activate_buttons
+        Button:
+            pos_hint: {"center_x":.5}
+            size_hint: .9,.2
+            text: "Regresar"
+            on_release: app.root.current = '1'
+
+<pagos>:
+    name:'8'
+    GridLayout:
+        cols: 1
+        size_hint: .8, .9
+        spacing: "20dp"
+        pos_hint: {"center_x":0.5,"center_y":0.5}
+        Label:
+            text: "Cantidad a Pagar:"
+        TextInput:
+            id: pay_register
+            multiline: False
+        Label:
+            text: "Número de clases"
+        TextInput:
+            id: class_register
+            multiline:False
+        Label:
+            text: "Número de alumno"
+        TextInput:
+            id: id
+            multiline: False
+        Button:
+            text: "Pagar"
+            on_press: root.pay_call()
+        Button:
+            text: "Regresar"
+            on_release: app.root.current = '1'
+
+
+        

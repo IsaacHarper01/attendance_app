@@ -1,0 +1,16 @@
+<CameraScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Camera:
+            id: camera
+            resolution: (640, 480)
+            play: False
+        Label:
+            id: qr_label
+            text: 'QR code will be shown here'
+        Button:
+            text: 'Start Camera'
+            on_press: root.start_camera()
+        Button:
+            text: 'Stop Camera'
+            on_press: root.stop_camera()
